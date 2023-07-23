@@ -1,4 +1,4 @@
-package com.chcenemiken.sbhackathonstartpack;
+package com.chenemiken.sbhackathonstartpack;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
