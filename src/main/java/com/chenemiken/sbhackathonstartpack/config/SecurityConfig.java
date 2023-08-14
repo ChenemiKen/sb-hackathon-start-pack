@@ -1,4 +1,4 @@
-package com.chenemiken.sbhackathonstartpack.config.auth;
+package com.chenemiken.sbhackathonstartpack.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +14,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/**")
+                        .requestMatchers("/","/signup")
                         .permitAll()
                         .anyRequest()
                         .authenticated()
