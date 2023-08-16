@@ -19,7 +19,7 @@ public class AuthController {
     CustomUserDetailsService userDetailsService;
 
     @GetMapping(path = "/signup")
-    public ResponseEntity<String> getSignup(){return new ResponseEntity<>("signup", HttpStatus.OK);}
+    public String getSignup(){return "signup";}
 
     @PostMapping(path = "/signup")
     public ResponseEntity<String> postSignup(){
