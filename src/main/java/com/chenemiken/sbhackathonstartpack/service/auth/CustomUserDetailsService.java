@@ -1,5 +1,6 @@
 package com.chenemiken.sbhackathonstartpack.service.auth;
 
+import com.chenemiken.sbhackathonstartpack.dto.UserDto;
 import com.chenemiken.sbhackathonstartpack.entity.User;
 import com.chenemiken.sbhackathonstartpack.repository.auth.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,9 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .build();
     }
 
-    public User createUser(User user){
-        return userRepository.save(user);
+    public UserDto createUser(UserDto newUser){
+        User user = UserDto.buildUser(newUser);
+//        return UserDto.buildDto(userRepository.save(user));
+        return newUser;
     }
 }

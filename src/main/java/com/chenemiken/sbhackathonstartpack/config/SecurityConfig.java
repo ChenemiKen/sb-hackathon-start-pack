@@ -14,14 +14,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/","/signup")
+                        .requestMatchers("/","/signup","/error")
                         .permitAll()
                         .anyRequest()
                         .authenticated()
                 )
                 .formLogin(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults())
-                .logout(logout -> logout.permitAll())
+//                .httpBasic(Customizer.withDefaults())
+//                .logout(logout -> logout.permitAll())
 //                .csrf(csrf -> csrf.disable())
                 .build();
     }
