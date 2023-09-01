@@ -22,26 +22,27 @@
 
           <div class="mb-3">
             <label for="inputUsername" class="form-label">Username</label>
-            <input type="text" th:field="*{username}" class="form-control" id="inputUsername" aria-describedby="usernameHelp">
+            <input type="text" th:field="*{username}" class="form-control" id="inputUsername" aria-describedby="usernameHelp" required>
             <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></small>
           </div>
 
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input type="text" th:field="*{email}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <input type="text" th:field="*{email}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
             <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
             <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></small>
           </div>
 
           <div class="mb-3">
             <label for="inputPassword1" class="form-label">Password</label>
-            <input type="password" th:field="*{password}" class="form-control" id="inputPassword1">
+            <input type="password" th:field="*{password}" class="form-control" id="inputPassword1" required>
             <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></small>
           </div>
 
           <div class="mb-3">
             <label for="inputPassword2" class="form-label">Confirm password</label>
-            <input type="password" class="form-control" id="inputPassword2">
+            <input type="password" class="form-control" id="inputPassword2" required>
+            <small id="confirmPasswordText" class="text-danger" hidden="true"></small>
           </div>
 
           <div class="text-center">
@@ -53,5 +54,24 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  <script>
+    let password1 = document.getElementById("inputPassword1")
+    let password2 = document.getElementById("inputPassword2")
+    let confirmPasswordText = document.getElementById("confirmPasswordText")
+
+    password1.addEventListener("blur", confirmPassword)
+    password2.addEventListener("blur", confirmPassword)
+
+    function confirmPassword(){
+        if(password1.value != password2.value){
+            confirmPasswordText.innerHTML = "passwords do not match!"
+            confirmPasswordText.hidden = false
+        }else{
+            confirmPasswordText.innerHTML = ""
+            confirmPasswordText.hidden = false
+        }
+    }
+    console.log("here we go")
+  </script>
 </body>
 </html>
