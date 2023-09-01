@@ -1,7 +1,6 @@
 package com.chenemiken.sbhackathonstartpack.controller.auth;
 
 import com.chenemiken.sbhackathonstartpack.dto.UserDto;
-import com.chenemiken.sbhackathonstartpack.entity.User;
 import com.chenemiken.sbhackathonstartpack.service.auth.CustomUserDetailsService;
 import jakarta.validation.Valid;
 import org.apache.commons.logging.Log;
@@ -22,15 +21,17 @@ public class AuthController {
     CustomUserDetailsService userDetailsService;
 
     @GetMapping(path = "/signup")
-    public String getSignup(){
+    public String getSignup(@ModelAttribute("user") UserDto user){
         return "signup";
     }
 
     @PostMapping(path = "/signup")
-    public String postSignup(@Valid UserDto user, BindingResult bindingResult){
+    public String postSignup(@ModelAttribute(value = "user") @Valid UserDto user, BindingResult bindingResult){
         logger.info("signup request: " + user);
-        if(bindingResult.hasErrors()) return "signup";
-        return new ResponseEntity<>(userDetailsService.createUser(user).toString(), HttpStatus.CREATED).toString();
+        if(bindingResult.hasErrors()){
+            return "signup";
+        }
+        return "redirect:/";
     }
 
     @GetMapping(path = "/start")

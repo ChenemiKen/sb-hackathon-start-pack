@@ -2,21 +2,24 @@ package com.chenemiken.sbhackathonstartpack.dto;
 
 import com.chenemiken.sbhackathonstartpack.entity.User;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.*;
 
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
-    @NotNull
+    @NotBlank(message = "please enter your preferred username")
     private String username;
 
-    @NotNull
-    @Email
+    @NotEmpty(message = "please enter your email address")
+    @Email(message = "please enter a valid email address")
     private String email;
 
-    @NotNull
+    @NotBlank(message = "please enter a secure password")
     private String password;
 
     @Override

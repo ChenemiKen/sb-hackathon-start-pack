@@ -22,19 +22,21 @@
 
           <div class="mb-3">
             <label for="inputUsername" class="form-label">Username</label>
-            <input type="text" class="form-control" id="inputUsername" aria-describedby="emailHelp">
-<!--            <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></small>-->
+            <input type="text" th:field="*{username}" class="form-control" id="inputUsername" aria-describedby="usernameHelp">
+            <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></small>
           </div>
 
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <input type="text" th:field="*{email}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
             <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></small>
           </div>
 
           <div class="mb-3">
             <label for="inputPassword1" class="form-label">Password</label>
-            <input type="password" class="form-control" id="inputPassword1">
+            <input type="password" th:field="*{password}" class="form-control" id="inputPassword1">
+            <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></small>
           </div>
 
           <div class="mb-3">
