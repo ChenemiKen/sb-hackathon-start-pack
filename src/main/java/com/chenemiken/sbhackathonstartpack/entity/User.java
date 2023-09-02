@@ -46,5 +46,14 @@ public class User implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired(){return true;}
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+            "id=" + id +
+            ", username='" + username + '\'' +
+            ", email='" + email + '\'' +
+            ", password='" + password + '\'' +
+            ", enabled=" + enabled +
+            '}';
+    }
 }

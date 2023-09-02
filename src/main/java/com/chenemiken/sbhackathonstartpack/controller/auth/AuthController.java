@@ -31,6 +31,7 @@ public class AuthController {
         if(bindingResult.hasErrors()){
             return "signup";
         }
+        userDetailsService.createUser(user);
         return "redirect:/";
     }
 

@@ -28,7 +28,7 @@
 
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input type="text" th:field="*{email}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+            <input type="email" th:field="*{email}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
             <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
             <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></small>
           </div>
