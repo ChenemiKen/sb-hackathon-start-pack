@@ -2,6 +2,7 @@ package com.chenemiken.sbhackathonstartpack.dto;
 
 import com.chenemiken.sbhackathonstartpack.entity.User;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
@@ -20,6 +21,7 @@ public class UserDto {
     private String email;
 
     @NotBlank(message = "please enter a secure password")
+    @Min(value = 8, message = "password must be at least 8 characters")
     private String password;
 
     @Override

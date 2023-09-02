@@ -54,24 +54,6 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-  <script>
-    let password1 = document.getElementById("inputPassword1")
-    let password2 = document.getElementById("inputPassword2")
-    let confirmPasswordText = document.getElementById("confirmPasswordText")
-
-    password1.addEventListener("blur", confirmPassword)
-    password2.addEventListener("blur", confirmPassword)
-
-    function confirmPassword(){
-        if(password1.value != password2.value){
-            confirmPasswordText.innerHTML = "passwords do not match!"
-            confirmPasswordText.hidden = false
-        }else{
-            confirmPasswordText.innerHTML = ""
-            confirmPasswordText.hidden = false
-        }
-    }
-    console.log("here we go")
-  </script>
+  <script type="text/javascript" src="/js/script.js"></script>
 </body>
 </html>
