@@ -22,20 +22,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     PasswordEncoder passwordEncoder;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if(user == null){
-            throw new UsernameNotFoundException("username not found");
-        }
-        logger.info(user.toString());
-        return org.springframework.security.core.userdetails.User.withUserDetails(user)
-            .passwordEncoder(passwordEncoder::encode)
-            .build();
-//        return User.builder()
-//                .username(user.getUsername())
-//                .email(user.getEmail())
-//                .password(user.getPassword())
-//                .enabled(user.isEnabled())
-//                .build();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("username not found"));
     }
 
     public void createUser(UserDto newUser){
