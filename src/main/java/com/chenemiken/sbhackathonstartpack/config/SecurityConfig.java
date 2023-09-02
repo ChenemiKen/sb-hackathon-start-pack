@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -21,10 +22,10 @@ public class SecurityConfig {
                         .anyRequest()
                         .authenticated()
                 )
-                .formLogin(Customizer.withDefaults())
-//                .httpBasic(Customizer.withDefaults())
-//                .logout(logout -> logout.permitAll())
-//                .csrf(csrf -> csrf.disable())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .permitAll())
+                .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher(("/logout"))))
                 .build();
     }
 

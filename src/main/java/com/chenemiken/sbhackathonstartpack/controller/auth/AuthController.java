@@ -8,6 +8,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +25,11 @@ public class AuthController {
 
     @GetMapping(path = "/signup")
     public String getSignup(@ModelAttribute("user") UserDto user){
-        return "signup";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null || authentication instanceof AnonymousAuthenticationToken){
+            return "signup";
+        }
+        return "redirect:/";
     }
 
     @PostMapping(path = "/signup")
@@ -32,6 +39,15 @@ public class AuthController {
             return "signup";
         }
         userDetailsService.createUser(user);
+        return "redirect:/";
+    }
+
+    @GetMapping(path = "/login")
+    public String getLogin(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null || authentication instanceof AnonymousAuthenticationToken){
+            return "login";
+        }
         return "redirect:/";
     }
 
