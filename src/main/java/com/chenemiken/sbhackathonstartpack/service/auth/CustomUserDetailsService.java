@@ -22,8 +22,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     PasswordEncoder passwordEncoder;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("username not found"));
+        return userRepository.findByUsernameOrEmail(username, username)
+                .orElseThrow(() -> new UsernameNotFoundException("user not found"));
     }
 
     public void createUser(UserDto newUser){
