@@ -1,8 +1,10 @@
 package com.chenemiken.sbhackathonstartpack.controller.auth;
 
 import com.chenemiken.sbhackathonstartpack.dto.UserDto;
+import com.chenemiken.sbhackathonstartpack.model.request.ForgotPasswordRequest;
 import com.chenemiken.sbhackathonstartpack.service.auth.CustomUserDetailsService;
 import jakarta.validation.Valid;
+import jakarta.validation.Validation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,8 +41,13 @@ public class AuthController {
         if(bindingResult.hasErrors()){
             return "signup";
         }
-        userDetailsService.createUser(user);
-        return "redirect:/";
+        try {
+            userDetailsService.createUser(user);
+        }catch (Exception e){
+            bindingResult.reject("", e.getMessage());
+            return "signup";
+        }
+        return "redirect:/login";
     }
 
     @GetMapping(path = "/login")
@@ -49,6 +57,26 @@ public class AuthController {
             return "login";
         }
         return "redirect:/";
+    }
+
+    @GetMapping(path = "/forgot-password")
+    public String getForgotPassword(@ModelAttribute("user")ForgotPasswordRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null || authentication instanceof AnonymousAuthenticationToken){
+            return "forgotPassword";
+        }
+        return "redirect:/reset-password";
+    }
+
+    @PostMapping(path = "/forgot-password")
+    public String postForgotPassword(@Valid ForgotPasswordRequest user, BindingResult bindingResult){
+        bindingResult.hasErrors();
+        return "forgotPassword";
+    }
+
+    @GetMapping(path = "/reset-password")
+    public String getResetPassword(){
+        return "resetPassword";
     }
 
     @GetMapping(path = "/start")

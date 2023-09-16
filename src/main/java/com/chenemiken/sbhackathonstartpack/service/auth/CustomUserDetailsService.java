@@ -3,7 +3,10 @@ package com.chenemiken.sbhackathonstartpack.service.auth;
 import com.chenemiken.sbhackathonstartpack.controller.auth.AuthController;
 import com.chenemiken.sbhackathonstartpack.dto.UserDto;
 import com.chenemiken.sbhackathonstartpack.entity.User;
+import com.chenemiken.sbhackathonstartpack.exceptions.SignupValidationException;
 import com.chenemiken.sbhackathonstartpack.repository.auth.UserRepository;
+import jakarta.validation.ConstraintViolationException;
+import lombok.SneakyThrows;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +29,13 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
     }
 
-    public void createUser(UserDto newUser){
+    public void createUser(UserDto newUser) throws SignupValidationException {
+        if(userRepository.findByEmail(newUser.getEmail()).isPresent()){
+            throw new SignupValidationException("email already registered.");
+        }
+        if(userRepository.findByUsername(newUser.getUsername()).isPresent()){
+            throw new SignupValidationException("Username already in use please enter a different username.");
+        }
         User user = UserDto.buildUser(newUser);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
