@@ -14,6 +14,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,8 +70,17 @@ public class AuthController {
     }
 
     @PostMapping(path = "/forgot-password")
-    public String postForgotPassword(@Valid ForgotPasswordRequest user, BindingResult bindingResult){
-        bindingResult.hasErrors();
+    public String postForgotPassword(@ModelAttribute(value = "user") @Valid ForgotPasswordRequest user,
+                                     BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()) return "forgotPassword";
+        try {
+            userDetailsService.handleForgotPassword(user);
+            model.addAttribute("success",
+                    "Success! please check your mail for a link to reset your password.");
+        }catch (Exception e){
+            bindingResult.reject("", e.getMessage());
+        }
+
         return "forgotPassword";
     }
 

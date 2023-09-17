@@ -4,6 +4,7 @@ import com.chenemiken.sbhackathonstartpack.controller.auth.AuthController;
 import com.chenemiken.sbhackathonstartpack.dto.UserDto;
 import com.chenemiken.sbhackathonstartpack.entity.User;
 import com.chenemiken.sbhackathonstartpack.exceptions.SignupValidationException;
+import com.chenemiken.sbhackathonstartpack.model.request.ForgotPasswordRequest;
 import com.chenemiken.sbhackathonstartpack.repository.auth.UserRepository;
 import jakarta.validation.ConstraintViolationException;
 import lombok.SneakyThrows;
@@ -39,5 +40,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = UserDto.buildUser(newUser);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+    }
+
+    public void  handleForgotPassword(ForgotPasswordRequest request){
+        userRepository.findByEmail(request.getEmail()).orElseThrow(
+                () -> new UsernameNotFoundException("No user found with the given email, please check and enter a" +
+                        "valid email address."));
+
     }
 }
