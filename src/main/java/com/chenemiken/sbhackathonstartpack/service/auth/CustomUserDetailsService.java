@@ -1,16 +1,19 @@
 package com.chenemiken.sbhackathonstartpack.service.auth;
 
-import com.chenemiken.sbhackathonstartpack.controller.auth.AuthController;
 import com.chenemiken.sbhackathonstartpack.dto.UserDto;
 import com.chenemiken.sbhackathonstartpack.entity.User;
 import com.chenemiken.sbhackathonstartpack.exceptions.SignupValidationException;
-import com.chenemiken.sbhackathonstartpack.model.request.ForgotPasswordRequest;
 import com.chenemiken.sbhackathonstartpack.repository.auth.UserRepository;
-import jakarta.validation.ConstraintViolationException;
-import lombok.SneakyThrows;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,18 +22,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-    private static final Log logger = LogFactory.getLog(AuthController.class);
+    private static final Log logger = LogFactory.getLog(CustomUserDetailsService.class);
     @Autowired
     UserRepository userRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsernameOrEmail(username, username)
-                .orElseThrow(() -> new UsernameNotFoundException("user not found"));
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("username not found"));
     }
 
-    public void createUser(UserDto newUser) throws SignupValidationException {
+    public void createUser(HttpServletRequest request, UserDto newUser) throws SignupValidationException {
         if(userRepository.findByEmail(newUser.getEmail()).isPresent()){
             throw new SignupValidationException("email already registered.");
         }
@@ -39,13 +42,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
         User user = UserDto.buildUser(newUser);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-    }
-
-    public void  handleForgotPassword(ForgotPasswordRequest request){
-        userRepository.findByEmail(request.getEmail()).orElseThrow(
-                () -> new UsernameNotFoundException("No user found with the given email, please check and enter a" +
-                        "valid email address."));
-
+        user = userRepository.save(user);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user, user.getPassword());
+        SecurityContext sc = SecurityContextHolder.getContext();
+        sc.setAuthentication(authentication);
+        HttpSession session = request.getSession(true);
+        session.setAttribute("SPRING_SECURITY_CONTEXT", sc);
     }
 }

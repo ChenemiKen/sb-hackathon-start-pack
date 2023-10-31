@@ -3,6 +3,7 @@ package com.chenemiken.sbhackathonstartpack.controller.auth;
 import com.chenemiken.sbhackathonstartpack.dto.UserDto;
 import com.chenemiken.sbhackathonstartpack.model.request.ForgotPasswordRequest;
 import com.chenemiken.sbhackathonstartpack.service.auth.CustomUserDetailsService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.Validation;
 import org.apache.commons.logging.Log;
@@ -37,13 +38,13 @@ public class AuthController {
     }
 
     @PostMapping(path = "/signup")
-    public String postSignup(@ModelAttribute(value = "user") @Valid UserDto user, BindingResult bindingResult){
+    public String postSignup(HttpServletRequest request, @ModelAttribute(value = "user") @Valid UserDto user, BindingResult bindingResult){
         logger.info("signup request: " + user);
         if(bindingResult.hasErrors()){
             return "signup";
         }
         try {
-            userDetailsService.createUser(user);
+            userDetailsService.createUser(request, user);
         }catch (Exception e){
             bindingResult.reject("", e.getMessage());
             return "signup";
@@ -74,7 +75,7 @@ public class AuthController {
                                      BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()) return "forgotPassword";
         try {
-            userDetailsService.handleForgotPassword(user);
+//            userDetailsService.handleForgotPassword(user);
             model.addAttribute("success",
                     "Success! please check your mail for a link to reset your password.");
         }catch (Exception e){
