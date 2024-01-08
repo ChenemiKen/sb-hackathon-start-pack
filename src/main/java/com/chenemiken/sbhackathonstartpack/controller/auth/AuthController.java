@@ -2,6 +2,7 @@ package com.chenemiken.sbhackathonstartpack.controller.auth;
 
 import com.chenemiken.sbhackathonstartpack.dto.UserDto;
 import com.chenemiken.sbhackathonstartpack.model.request.ForgotPasswordRequest;
+import com.chenemiken.sbhackathonstartpack.model.request.ResetPasswordRequest;
 import com.chenemiken.sbhackathonstartpack.service.auth.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -87,7 +88,7 @@ public class AuthController {
     }
 
     @GetMapping(path = "/reset-password")
-    public String getResetPassword(){
+    public String getResetPassword(@ModelAttribute(value = "user") ResetPasswordRequest user){
         return "resetPassword";
     }
 
