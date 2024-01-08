@@ -38,7 +38,8 @@ public class AuthController {
     }
 
     @PostMapping(path = "/signup")
-    public String postSignup(HttpServletRequest request, @ModelAttribute(value = "user") @Valid UserDto user, BindingResult bindingResult){
+    public String postSignup(HttpServletRequest request, @ModelAttribute(value = "user") @Valid UserDto user,
+                             BindingResult bindingResult){
         logger.info("signup request: " + user);
         if(bindingResult.hasErrors()){
             return "signup";
