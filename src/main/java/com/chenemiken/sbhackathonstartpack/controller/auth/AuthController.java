@@ -88,8 +88,26 @@ public class AuthController {
     }
 
     @GetMapping(path = "/reset-password")
-    public String getResetPassword(@ModelAttribute(value = "user") ResetPasswordRequest user){
+    public String getResetPassword(@ModelAttribute(value = "user") ResetPasswordRequest request){
         return "resetPassword";
+    }
+
+    @PostMapping(path = "/reset-password")
+    public String postResetPassword(@ModelAttribute(value = "user") @Valid ResetPasswordRequest data,
+                                    BindingResult bindingResult, HttpServletRequest request){
+        logger.info("reset password request: " + data);
+        if(bindingResult.hasErrors()){
+            return "resetPassword";
+        }
+
+        try {
+            userDetailsService.resetPassword(request, data);
+        }catch (SecurityException e){
+            bindingResult.reject("", e.getMessage());
+            return "resetPassword";
+        }
+
+        return "redirect:/";
     }
 
     @GetMapping(path = "/start")

@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 @Getter
+@Setter
 public class ResetPasswordRequest {
     @NotBlank(message = "please enter your old password")
     String oldPassword;

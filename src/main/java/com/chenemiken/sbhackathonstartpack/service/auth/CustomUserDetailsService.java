@@ -3,6 +3,7 @@ package com.chenemiken.sbhackathonstartpack.service.auth;
 import com.chenemiken.sbhackathonstartpack.dto.UserDto;
 import com.chenemiken.sbhackathonstartpack.entity.User;
 import com.chenemiken.sbhackathonstartpack.exceptions.SignupValidationException;
+import com.chenemiken.sbhackathonstartpack.model.request.ResetPasswordRequest;
 import com.chenemiken.sbhackathonstartpack.repository.auth.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,6 +20,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+
+import java.security.Principal;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -48,5 +52,16 @@ public class CustomUserDetailsService implements UserDetailsService {
         sc.setAuthentication(authentication);
         HttpSession session = request.getSession(true);
         session.setAttribute("SPRING_SECURITY_CONTEXT", sc);
+    }
+
+    public void resetPassword(HttpServletRequest request, ResetPasswordRequest data){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        logger.info("user: "+ user);
+        if(!passwordEncoder.matches(data.getOldPassword(), user.getPassword())){
+            throw new SecurityException("incorrect password");
+        }
+        logger.info(data.getNewPassword());
+        user.setPassword(passwordEncoder.encode(data.getNewPassword()));
+        userRepository.save(user);
     }
 }
