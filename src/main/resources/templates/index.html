@@ -57,16 +57,20 @@
     <div th:fragment="toast" class="toast-container position-fixed top-0 end-0 p-3">
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
-                <img src="..." class="rounded me-2" alt="...">
-                <strong class="me-auto">Bootstrap</strong>
-                <small>11 mins ago</small>
+                <img src="..." class="rounded me-2" alt="..." height="20" width="20" id="toast-icon">
+                <strong class="me-auto" id="toast-title">Bootstrap</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body" th:text="${success}">
-                Hello, world! This is a toast message.
+                Hello, world! This is a toast message.s
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script th:inline="javascript">
+        let success = [[${success}]]
+        let error = [[${error}]]
+    </script>
+    <script type="text/javascript" src="/js/script.js" th:inline="javascript"></script>
 </body>
 </html>

@@ -54,13 +54,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         session.setAttribute("SPRING_SECURITY_CONTEXT", sc);
     }
 
-    public void resetPassword(HttpServletRequest request, ResetPasswordRequest data){
+    public void resetPassword(ResetPasswordRequest data){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        logger.info("user: "+ user);
         if(!passwordEncoder.matches(data.getOldPassword(), user.getPassword())){
             throw new SecurityException("incorrect password");
         }
-        logger.info(data.getNewPassword());
         user.setPassword(passwordEncoder.encode(data.getNewPassword()));
         userRepository.save(user);
     }

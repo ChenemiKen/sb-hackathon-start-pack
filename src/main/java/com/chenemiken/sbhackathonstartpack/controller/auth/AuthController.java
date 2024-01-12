@@ -6,7 +6,6 @@ import com.chenemiken.sbhackathonstartpack.model.request.ResetPasswordRequest;
 import com.chenemiken.sbhackathonstartpack.service.auth.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import jakarta.validation.Validation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -80,6 +78,7 @@ public class AuthController {
 //            userDetailsService.handleForgotPassword(user);
             model.addAttribute("success",
                     "Success! please check your mail for a link to reset your password.");
+
         }catch (Exception e){
             bindingResult.reject("", e.getMessage());
         }
@@ -94,20 +93,22 @@ public class AuthController {
 
     @PostMapping(path = "/reset-password")
     public String postResetPassword(@ModelAttribute(value = "user") @Valid ResetPasswordRequest data,
-                                    BindingResult bindingResult, HttpServletRequest request){
+                                    BindingResult bindingResult, Model model){
         logger.info("reset password request: " + data);
         if(bindingResult.hasErrors()){
             return "resetPassword";
         }
 
         try {
-            userDetailsService.resetPassword(request, data);
+            userDetailsService.resetPassword(data);
         }catch (SecurityException e){
             bindingResult.reject("", e.getMessage());
             return "resetPassword";
         }
 
-        return "redirect:/";
+        model.addAttribute("success", "password changed successfully");
+
+        return "resetPassword";
     }
 
     @GetMapping(path = "/start")
