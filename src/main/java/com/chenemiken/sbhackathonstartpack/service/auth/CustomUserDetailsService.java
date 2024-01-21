@@ -3,6 +3,7 @@ package com.chenemiken.sbhackathonstartpack.service.auth;
 import com.chenemiken.sbhackathonstartpack.dto.UserDto;
 import com.chenemiken.sbhackathonstartpack.entity.User;
 import com.chenemiken.sbhackathonstartpack.exceptions.SignupValidationException;
+import com.chenemiken.sbhackathonstartpack.model.request.ForgotPasswordRequest;
 import com.chenemiken.sbhackathonstartpack.model.request.ResetPasswordRequest;
 import com.chenemiken.sbhackathonstartpack.repository.auth.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +32,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     UserRepository userRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    EmailServiceImpl mailService;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
@@ -61,5 +64,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
         user.setPassword(passwordEncoder.encode(data.getNewPassword()));
         userRepository.save(user);
+    }
+
+    public void handleForgotPassword(ForgotPasswordRequest request){
+        mailService.sendSimpleMessage();
     }
 }

@@ -75,12 +75,13 @@ public class AuthController {
                                      BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()) return "forgotPassword";
         try {
-//            userDetailsService.handleForgotPassword(user);
+            userDetailsService.handleForgotPassword(user);
             model.addAttribute("success",
                     "Success! please check your mail for a link to reset your password.");
 
         }catch (Exception e){
             bindingResult.reject("", e.getMessage());
+            logger.error(e.getMessage());
         }
 
         return "forgotPassword";
